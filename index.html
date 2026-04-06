@@ -1692,17 +1692,12 @@
                     <a href="#services" class="hero-btn">Our Services <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
-            <div class="hero-slide slide4"></div>
-            <div class="hero-slide slide5"></div>
+            <div class="hero-slide slide4 hero-slide-desktop"></div>
+            <div class="hero-slide slide5 hero-slide-desktop"></div>
         </div>
         <button class="hero-arrow left" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
         <button class="hero-arrow right" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
-        <div class="hero-nav" id="heroDots">
-            <button class="hero-dot active" data-index="0"></button>
-            <button class="hero-dot" data-index="1"></button>
-            <button class="hero-dot" data-index="2"></button>
-            <button class="hero-dot" data-index="3"></button>
-        </div>
+        <div class="hero-nav" id="heroDots"></div>
     </section>
 
     <!-- WHAT WE PROVIDE -->
@@ -2125,13 +2120,27 @@
         }
         (function () {
             // ─── SLIDER ───
+            // Remove desktop-only banner slides on mobile
+            if (window.innerWidth <= 900) {
+                document.querySelectorAll('.hero-slide-desktop').forEach(s => s.remove());
+            }
+
             const slider = document.getElementById('heroSlider');
-            const dots = document.querySelectorAll('.hero-dot');
             const prevBtn = document.getElementById('prevSlide');
             const nextBtn = document.getElementById('nextSlide');
             const slides = document.querySelectorAll('.hero-slide');
+            const dotsContainer = document.getElementById('heroDots');
             let current = 0;
             let autoplayTimer;
+
+            // Build dots dynamically based on actual slide count
+            slides.forEach((_, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'hero-dot' + (i === 0 ? ' active' : '');
+                btn.dataset.index = i;
+                dotsContainer.appendChild(btn);
+            });
+            const dots = dotsContainer.querySelectorAll('.hero-dot');
 
             function goTo(i) {
                 if (i < 0) i = slides.length - 1;
